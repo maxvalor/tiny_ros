@@ -15,13 +15,13 @@ public:
     t = std::thread([]()
     {
       tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
-      auto topic = handle.advertise<int>("test");
+      auto topic = handle.advertise<int, int>("test");
 
       int i = 100000;
 
       while (--i)
       {
-        topic->publish(i);
+        topic->publish(i, i * -1);
       }
     });
   }

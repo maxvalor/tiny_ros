@@ -15,12 +15,12 @@ public:
     {
       tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
 
-      auto sub_callback = [](int data)
+      auto sub_callback = [](int data, int op_data)
       {
-        std::cout << "sub_callback:" << data << std::endl;
+        std::cout << "sub_callback:" << data  << " and " << op_data << std::endl;
       };
 
-      handle.subscribe<int>("test", sub_callback);
+      handle.subscribe<int, int>("test", sub_callback);
     });
   }
 
