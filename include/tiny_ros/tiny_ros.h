@@ -96,26 +96,6 @@ public:
     topic->addSubscriber(f);
   }
 
-  template <typename T>
-  void subscribe2(std::string name, std::function<void(T)> f)
-  {
-    subscribe2(name, f);
-  }
-
-  template <typename T1, typename T2>
-  void subscribe2(std::string name, std::function<void(T1, T2)> f)
-  {
-    subscribe2(name, f);
-  }
-
-  template <typename... T>
-  void subscribe2(std::string name, std::function<void(T...)> f)
-  {
-    std::lock_guard<std::mutex> lck(topic_mtx);
-    auto topic = resovle<T...>(name);
-    topic->addSubscriber(f);
-  }
-
   template <typename... T>
   void advertiseService(std::string name, auto f)
   {
