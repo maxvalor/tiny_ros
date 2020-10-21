@@ -21,13 +21,6 @@ public:
       };
 
       handle.subscribe<int>("test", sub_callback);
-      handle.subscribe2<int>("test", sub_callback);
-
-      auto aaa = [](int a, int b)
-      {
-        ;
-      };
-      handle.subscribe2<int, int>("test", aaa);
     });
   }
 
