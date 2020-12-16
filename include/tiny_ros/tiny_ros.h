@@ -39,7 +39,7 @@ class NodeHandle
 
 private:
   template <typename T>
-  Topic<T>* resovle(std::string name)
+  Topic<T>* resovle(std::string& name)
   {
     Topic<T> *topic = nullptr;
     try
