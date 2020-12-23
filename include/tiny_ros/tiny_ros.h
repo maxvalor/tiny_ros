@@ -8,25 +8,35 @@
 
 namespace tiny_ros
 {
+using lock_guard = std::lock_guard<std::mutex>;
+
 template <typename T>
-struct Topic
+class Topic
 {
   std::mutex mtx;
   std::vector<T> subscribers;
-
+  friend class NodeHandle;
+public:
   template <typename ...PARAMS>
   void publish(PARAMS... msg)
   {
-    std::lock_guard<std::mutex> lck(mtx);
+    lock_guard lck(mtx);
     for (auto subscriber : subscribers)
       subscriber(msg...);
   }
 };
 
 template <typename T>
-struct Service
+class Service
 {
-  T call;
+  T f;
+  friend class NodeHandle;
+public:
+  template <typename ...PARAMS>
+  bool call(PARAMS... srv)
+  {
+    f(srv...);
+  }
 };
 
 class NodeHandle
@@ -67,33 +77,33 @@ public:
   template <typename T>
   Topic<T>* advertise(std::string name)
   {
-    std::lock_guard<std::mutex> lck(topic_mtx);
-    Topic<T> *topic = resovle<T>(name);
+    lock_guard lck(topic_mtx);
+    auto topic = resovle<T>(name);
     return topic;
   }
 
   template <typename T>
   void subscribe(std::string name, T&& func)
   {
-    std::lock_guard<std::mutex> lck(topic_mtx);
-    Topic<T> *topic = resovle<T>(name);
-    std::lock_guard<std::mutex> tlck(topic->mtx);
+    lock_guard lck(topic_mtx);
+    auto topic = resovle<T>(name);
+    lock_guard tlck(topic->mtx);
     topic->subscribers.push_back(func);
   }
 
   template <typename T>
   void advertiseService(std::string name, T&& func)
   {
-    std::lock_guard<std::mutex> lck(srv_mtx);
-    Service<T> *srv = new Service<T>();
-    srv->call = func;
+    lock_guard lck(srv_mtx);
+    auto srv = new Service<T>();
+    srv->f = func;
     srvs.insert(std::pair<std::string, void*>(name, (void*)srv));
   }
 
   template <typename T>
   Service<T> *serviceClient(std::string name)
   {
-    std::lock_guard<std::mutex> lck(srv_mtx);
+    lock_guard lck(srv_mtx);
     try
     {
       auto origin_srv = srvs.at(name);
