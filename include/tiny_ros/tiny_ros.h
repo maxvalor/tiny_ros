@@ -1,8 +1,8 @@
 #ifndef TINY_ROS_H
 #define TINY_ROS_H
 
-#include <list>
-#include <map>
+#include <vector>
+#include <unordered_map>
 #include <string>
 #include <mutex>
 
@@ -12,7 +12,7 @@ template <typename T>
 struct Topic
 {
   std::mutex mtx;
-  std::list<T> subscribers;
+  std::vector<T> subscribers;
 
   template <typename ...PARAMS>
   void publish(PARAMS... msg)
@@ -31,8 +31,8 @@ struct Service
 
 class NodeHandle
 {
-  std::map<std::string, void*> topics;
-  std::map<std::string, void*> srvs;
+  std::unordered_map<std::string, void*> topics;
+  std::unordered_map<std::string, void*> srvs;
   static NodeHandle* singleton;
   std::mutex topic_mtx;
   std::mutex srv_mtx;
@@ -73,7 +73,7 @@ public:
   }
 
   template <typename T>
-  void subscribe(std::string name, T func)
+  void subscribe(std::string name, T&& func)
   {
     std::lock_guard<std::mutex> lck(topic_mtx);
     Topic<T> *topic = resovle<T>(name);
@@ -82,7 +82,7 @@ public:
   }
 
   template <typename T>
-  void advertiseService(std::string name, T func)
+  void advertiseService(std::string name, T&& func)
   {
     std::lock_guard<std::mutex> lck(srv_mtx);
     Service<T> *srv = new Service<T>();
