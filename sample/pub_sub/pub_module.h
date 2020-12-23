@@ -4,6 +4,7 @@
 #include <tiny_ros/tiny_ros.h>
 #include <thread>
 #include <iostream>
+#include <sys/time.h>
 
 class PubModule
 {
@@ -15,13 +16,12 @@ public:
     t = std::thread([]()
     {
       tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
-      auto topic = handle.advertise<MESSAGE_TYPE(int, int)>("test");
+      auto topic = handle.advertise<int, int>("test");
 
-      int i = 100000;
-
+      int i = 1000000;
       while (--i)
       {
-        topic->publish(i, 0);
+        topic->publish(i, i * -1);
       }
     });
   }

@@ -10,7 +10,7 @@ public:
   ServerModule()
   {
     tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
-    handle.advertiseService<SERVICE_TYPE(int, int*)>("add_1", [](int x, int *rlt)
+    handle.advertiseService<int, int*>("add_1", [](int x, int *rlt)
     {
       *rlt = x + 1;
       return true;

@@ -19,7 +19,7 @@ public:
       while (--i)
       {
         tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
-        auto srv = handle.serviceClient<SERVICE_TYPE(int, int*)>("add_1");
+        auto srv = handle.serviceClient<int, int*>("add_1");
         if (srv != nullptr)
         {
           int rlt = 0;
