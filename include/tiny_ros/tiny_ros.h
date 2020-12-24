@@ -90,7 +90,7 @@ public:
   }
 
   template <typename... T, typename F>
-  void subscribe(std::string name, F& f)
+  void subscribe(std::string name, F f)
   {
     std::lock_guard<std::mutex> lck(topic_mtx);
     auto topic = resovle<T...>(name);
