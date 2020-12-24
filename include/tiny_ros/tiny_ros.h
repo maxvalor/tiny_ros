@@ -2,7 +2,7 @@
 #define TINY_ROS_H
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <mutex>
 
@@ -18,7 +18,7 @@ class Topic
   friend class NodeHandle;
 
   template <typename F>
-  void addSubscriber(F& f)
+  void addSubscriber(F&& f)
   {
     lock_guard lck(mtx);
     subscribers.emplace_back(f);
@@ -49,8 +49,8 @@ public:
 class NodeHandle
 {
   static NodeHandle* singleton;
-  std::map<std::string, void*> topics;
-  std::map<std::string, void*> srvs;
+  std::unordered_map<std::string, void*> topics;
+  std::unordered_map<std::string, void*> srvs;
   std::mutex topic_mtx;
   std::mutex srv_mtx;
 
@@ -90,7 +90,7 @@ public:
   }
 
   template <typename... T, typename F>
-  void subscribe(std::string name, F f)
+  void subscribe(std::string name, F&& f)
   {
     std::lock_guard<std::mutex> lck(topic_mtx);
     auto topic = resovle<T...>(name);
@@ -98,7 +98,7 @@ public:
   }
 
   template <typename... T, typename F>
-  void advertiseService(std::string name, F f)
+  void advertiseService(std::string name, F&& f)
   {
     std::lock_guard<std::mutex> lck(srv_mtx);
     auto *srv = new Service<T...>();
