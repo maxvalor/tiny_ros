@@ -12,7 +12,7 @@ cc_library(
   ],
   linkopts = ["-lpthread"],
   linkstatic = False,
-  copts = ["-std=c++14"]
+  copts = ["-std=c++11"]
 )
 
 cc_binary(
