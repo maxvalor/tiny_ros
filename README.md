@@ -5,16 +5,16 @@ The only thing you should do is to include the tiny_ros.h into in your project.
 
 You can build the sample with three tools: cmake, bazel and cazel, with the following commands:
 
-cmake:
+## cmake
 
     mkdir build
     cd build
     cmake .. && make -j
   
-bazel:  
+## bazel
 
     bazel build ...
  
-cazel:
+## cazel
 
     cazel build tiny_ros
