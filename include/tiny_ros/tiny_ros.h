@@ -62,12 +62,12 @@ private:
     try
     {
       auto origin_topic = topics.at(name);
-      topic = (Topic<T...>*)origin_topic;
+      topic = static_cast<Topic<T...>*>(origin_topic);
     }
     catch(...)
     {
       topic = new Topic<T...>();
-      topics.insert(std::pair<std::string, void*>(name, (void*)topic));
+      topics.insert(std::pair<std::string, void*>(name, static_cast<void*>(topic)));
     }
     return topic;
   }
@@ -103,7 +103,8 @@ public:
     std::lock_guard<std::mutex> lck(srv_mtx);
     auto *srv = new Service<T...>();
     srv->f = f;
-    srvs.insert(std::pair<std::string, void*>(name, (void*)srv));
+    // srvs.insert(std::pair<std::string, void*>(name, (void*)srv));
+    srvs.insert(std::pair<std::string, void*>(name, static_cast<void*>(srv)));
   }
 
   template <typename... T>
@@ -113,7 +114,7 @@ public:
     try
     {
       auto origin_srv = srvs.at(name);
-      auto srv = (Service<T...>*)origin_srv;
+      auto srv = static_cast<Service<T...>*>(origin_srv);
       return srv;
     }
     catch(...) {}
