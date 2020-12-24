@@ -16,12 +16,12 @@ public:
     t = std::thread([]()
     {
       tiny_ros::NodeHandle& handle = tiny_ros::NodeHandle::Instance();
-      auto topic = handle.advertise<int, int>("test");
+      auto topic = handle.advertise<int, float, float, int>("test");
 
-      int i = 1000000;
+      int i = 100000;
       while (--i)
       {
-        topic->publish(i, i * -1);
+        topic->publish(i, i + 1.1, i * 2.1, 3);
       }
     });
   }
