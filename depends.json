@@ -1,0 +1,12 @@
+{
+  "config":{
+    "name": "tiny_ros",
+    "path": "depends",
+    "cmake": "",
+    "make": "-j8"
+  },
+  "depends": [
+    {
+    }
+  ]
+}
