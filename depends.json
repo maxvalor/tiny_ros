@@ -3,7 +3,7 @@
     "name": "tiny_ros",
     "path": "depends",
     "cmake": "",
-    "make": "-j8"
+    "make": "-j"
   },
   "depends": [
     {
